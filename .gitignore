@@ -1,0 +1,39 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Dependency directories
+node_modules/
+packages/
+
+# Docker
+*.env
+docker-compose.override.yml
+.dockerignore
+
+# Publish output
+/app/publish/
+
+# Rider
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/

@@ -1,8 +1,5 @@
-using System;
+using PebaFinance.Domain.Models;
 
 namespace PebaFinance.Application.DTOs;
 
-public class IncomeDto
-{
-
-}
+public class IncomeDto : BaseEntity { }

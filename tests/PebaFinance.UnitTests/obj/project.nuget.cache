@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "FXLE/k793IY=",
+  "dgSpecHash": "iWG3MjJGnow=",
   "success": true,
   "projectFilePath": "/home/hackmann/Projects/peba-finance/tests/PebaFinance.UnitTests/PebaFinance.UnitTests.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "/home/hackmann/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.11.0/fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
     "/home/hackmann/.nuget/packages/mediatr/11.1.0/mediatr.11.1.0.nupkg.sha512",
     "/home/hackmann/.nuget/packages/mediatr.contracts/1.0.1/mediatr.contracts.1.0.1.nupkg.sha512",
+    "/home/hackmann/.nuget/packages/mediatr.extensions.microsoft.dependencyinjection/11.1.0/mediatr.extensions.microsoft.dependencyinjection.11.1.0.nupkg.sha512",
     "/home/hackmann/.nuget/packages/microsoft.extensions.dependencyinjection/9.0.3/microsoft.extensions.dependencyinjection.9.0.3.nupkg.sha512",
     "/home/hackmann/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/9.0.3/microsoft.extensions.dependencyinjection.abstractions.9.0.3.nupkg.sha512",
     "/home/hackmann/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.3/microsoft.aspnetcore.app.ref.9.0.3.nupkg.sha512"

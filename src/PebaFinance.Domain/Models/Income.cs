@@ -1,6 +1,3 @@
 namespace PebaFinance.Domain.Models;
 
-public class Income : BaseEntity
-{
-
-}
+public class Income : BaseEntity { }
