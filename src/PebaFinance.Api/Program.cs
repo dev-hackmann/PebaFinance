@@ -8,7 +8,7 @@ using PebaFinance.Application.Interfaces;
 using PebaFinance.Infrastructure.Data;
 using PebaFinance.Infrastructure.Data.Repositories;
 
-namespace FinanceApi
+namespace PebaFinance.Api
 {
     public class Program
     {
