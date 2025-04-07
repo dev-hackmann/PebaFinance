@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "zNbLMQqND4M=",
+  "success": true,
+  "projectFilePath": "/home/hackmann/Projects/peba-finance/tests/PebaFinance.FunctionalTests/PebaFinance.FunctionalTests.csproj",
+  "expectedPackageFiles": [
+    "/home/hackmann/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.3/microsoft.aspnetcore.app.ref.9.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
