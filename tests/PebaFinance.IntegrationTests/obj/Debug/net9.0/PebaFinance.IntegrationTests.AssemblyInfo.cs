@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PebaFinance.IntegrationTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c18029b0dafdd206ee75ffa738dfa2327590e277")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b267ac6744fea0ef372f629f2e399f94ad3bf56")]
 [assembly: System.Reflection.AssemblyProductAttribute("PebaFinance.IntegrationTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PebaFinance.IntegrationTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
