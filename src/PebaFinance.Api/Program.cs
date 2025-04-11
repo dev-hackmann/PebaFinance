@@ -1,15 +1,6 @@
-using System.Reflection;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using MySqlConnector;
-using PebaFinance.Application.Interfaces;
-using PebaFinance.Infrastructure.Data;
-using PebaFinance.Infrastructure.Data.Repositories;
+using PebaFinance.Infrastructure;
 
-namespace PebaFinance.Api
+namespace FinanceApi
 {
     public class Program
     {
@@ -17,51 +8,10 @@ namespace PebaFinance.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to container
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Finance API", Version = "v1" });
-            });
-
-            builder.Services.AddMediatR(
-                Assembly.GetExecutingAssembly(), // Current assembly
-                Assembly.Load("PebaFinance.Application") // Application assembly containing handlers
-            );
-
-            // Add FluentValidation
-            builder.Services.AddFluentValidationAutoValidation();
-            builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
-            // Add MySQL connection
-            try{
- var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<FinanceDbContext>(options =>
-                options.UseMySql(
-                    connectionString, 
-                    ServerVersion.AutoDetect(connectionString),
-                    mySqlOptions => mySqlOptions.EnableRetryOnFailure()));
-            } catch (MySqlException ex)
-
-                {
-
-                    Console.WriteLine($"MySQL error: {ex.Message}");
-
-                }
-
-                catch (Exception ex)
-
-                {
-
-                    Console.WriteLine($"General error: {ex.Message}");
-
-                }
-           
-
-            // Register repositories
-            builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
-            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            // Register services using DependencyInjection class
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddApplication();
+            builder.Services.AddApiServices();
 
             var app = builder.Build();
 
