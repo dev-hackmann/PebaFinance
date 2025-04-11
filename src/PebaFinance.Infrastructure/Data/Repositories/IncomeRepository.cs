@@ -29,7 +29,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<bool> DeleteAsync(int id)
     {
         const string sql = "DELETE FROM income WHERE Id = @Id";
-        
+
         using var connection = _connectionFactory.CreateConnection();
         var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
         return rowsAffected > 0;
@@ -38,7 +38,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<IEnumerable<Income>> GetAllAsync()
     {
         const string sql = "SELECT * FROM income";
-        
+
         using var connection = _connectionFactory.CreateConnection();
         return await connection.QueryAsync<Income>(sql);
     }
@@ -46,7 +46,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<Income?> GetByIdAsync(int id)
     {
         const string sql = "SELECT * FROM income WHERE Id = @Id";
-        
+
         using var connection = _connectionFactory.CreateConnection();
         return await connection.QuerySingleOrDefaultAsync<Income>(sql, new { Id = id });
     }
@@ -54,7 +54,7 @@ public class IncomeRepository : IIncomeRepository
     public async Task<IEnumerable<Income>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
     {
         const string sql = "SELECT * FROM income WHERE Date >= @StartDate AND Date <= @EndDate";
-        
+
         using var connection = _connectionFactory.CreateConnection();
         return await connection.QueryAsync<Income>(sql, new { StartDate = startDate, EndDate = endDate });
     }
@@ -65,7 +65,7 @@ public class IncomeRepository : IIncomeRepository
             UPDATE income 
             SET Description = @Description, Value = @Value, Date = @Date
             WHERE Id = @Id";
-        
+
         using var connection = _connectionFactory.CreateConnection();
         var rowsAffected = await connection.ExecuteAsync(sql, income);
         return rowsAffected > 0;

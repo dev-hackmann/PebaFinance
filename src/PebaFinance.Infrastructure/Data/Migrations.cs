@@ -7,6 +7,6 @@ namespace PebaFinance.Infrastructure.Data
 {
     public class Migrations
     {
-        
+
     }
 }

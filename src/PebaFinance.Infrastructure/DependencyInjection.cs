@@ -16,11 +16,9 @@ namespace PebaFinance.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            // Registrar fábrica de conexão
-            services.AddSingleton<IDbConnectionFactory>(provider => 
+            services.AddSingleton<IDbConnectionFactory>(provider =>
                 new DbConnectionFactory(configuration));
 
-            // Registrar repositórios
             services.AddScoped<IIncomeRepository, IncomeRepository>();
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
@@ -46,9 +44,9 @@ namespace PebaFinance.Infrastructure
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo 
-                { 
-                    Title = "Peba Finance API", 
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Peba Finance API",
                     Version = "v1",
                     Description = "API for finance management with income and expenses tracking",
                     Contact = new OpenApiContact

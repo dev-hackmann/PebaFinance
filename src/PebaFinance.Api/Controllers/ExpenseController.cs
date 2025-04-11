@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.DTOs;
@@ -7,7 +6,7 @@ using PebaFinance.Application.Queries;
 
 namespace PebaFinance.Api.Controllers
 {
-[ApiController]
+    [ApiController]
     [Route("api/[controller]")]
     public class ExpenseController : ControllerBase
     {
