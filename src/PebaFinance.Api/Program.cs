@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MySqlConnector;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Infrastructure.Data;
 using PebaFinance.Infrastructure.Data.Repositories;
@@ -34,12 +35,29 @@ namespace PebaFinance.Api
             builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             // Add MySQL connection
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            try{
+ var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<FinanceDbContext>(options =>
                 options.UseMySql(
                     connectionString, 
                     ServerVersion.AutoDetect(connectionString),
                     mySqlOptions => mySqlOptions.EnableRetryOnFailure()));
+            } catch (MySqlException ex)
+
+                {
+
+                    Console.WriteLine($"MySQL error: {ex.Message}");
+
+                }
+
+                catch (Exception ex)
+
+                {
+
+                    Console.WriteLine($"General error: {ex.Message}");
+
+                }
+           
 
             // Register repositories
             builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
