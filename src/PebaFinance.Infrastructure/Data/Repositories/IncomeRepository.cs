@@ -1,4 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+// src/PebaFinance.Infrastructure/Data/Repositories/IncomeRepository.cs
+using System.Data;
+using Dapper;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
 
@@ -6,49 +8,66 @@ namespace PebaFinance.Infrastructure.Data.Repositories;
 
 public class IncomeRepository : IIncomeRepository
 {
-    private readonly FinanceDbContext _context;
+    private readonly IDbConnectionFactory _connectionFactory;
 
-    public IncomeRepository(FinanceDbContext context)
+    public IncomeRepository(IDbConnectionFactory connectionFactory)
     {
-        _context = context;
+        _connectionFactory = connectionFactory;
     }
 
-    public async Task<int> AddAsync(Income Income)
+    public async Task<int> AddAsync(Income income)
     {
-        _context.Income.Add(Income);
-        await _context.SaveChangesAsync();
-        return Income.Id;
+        const string sql = @"
+            INSERT INTO income (Description, Value, Date) 
+            VALUES (@Description, @Value, @Date);
+            SELECT LAST_INSERT_ID();";
+
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.ExecuteScalarAsync<int>(sql, income);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var Income = await _context.Income.FindAsync(id);
-        if (Income == null) return false;
-
-        _context.Income.Remove(Income);
-        return await _context.SaveChangesAsync() > 0;
+        const string sql = "DELETE FROM income WHERE Id = @Id";
+        
+        using var connection = _connectionFactory.CreateConnection();
+        var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
+        return rowsAffected > 0;
     }
 
     public async Task<IEnumerable<Income>> GetAllAsync()
     {
-        return await _context.Income.ToListAsync();
+        const string sql = "SELECT * FROM income";
+        
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<Income>(sql);
     }
 
     public async Task<Income?> GetByIdAsync(int id)
     {
-        return await _context.Income.FindAsync(id);
+        const string sql = "SELECT * FROM income WHERE Id = @Id";
+        
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QuerySingleOrDefaultAsync<Income>(sql, new { Id = id });
     }
 
     public async Task<IEnumerable<Income>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
     {
-        return await _context.Income
-            .Where(r => r.Date >= startDate && r.Date <= endDate)
-            .ToListAsync();
+        const string sql = "SELECT * FROM income WHERE Date >= @StartDate AND Date <= @EndDate";
+        
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<Income>(sql, new { StartDate = startDate, EndDate = endDate });
     }
 
-    public async Task<bool> UpdateAsync(Income Income)
+    public async Task<bool> UpdateAsync(Income income)
     {
-        _context.Income.Update(Income);
-        return await _context.SaveChangesAsync() > 0;
+        const string sql = @"
+            UPDATE income 
+            SET Description = @Description, Value = @Value, Date = @Date
+            WHERE Id = @Id";
+        
+        using var connection = _connectionFactory.CreateConnection();
+        var rowsAffected = await connection.ExecuteAsync(sql, income);
+        return rowsAffected > 0;
     }
 }
