@@ -1,5 +1,4 @@
 using System.Data;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 
@@ -13,6 +12,7 @@ public interface IDbConnectionFactory
 public class DbConnectionFactory : IDbConnectionFactory
 {
     private readonly string _connectionString;
+    private IDbConnection? _connection;
 
     public DbConnectionFactory(IConfiguration configuration)
     {
@@ -21,6 +21,11 @@ public class DbConnectionFactory : IDbConnectionFactory
 
     public IDbConnection CreateConnection()
     {
-        return new MySqlConnection(_connectionString);
+        if (_connection == null || _connection.State == ConnectionState.Closed || _connection.State == ConnectionState.Broken)
+        {
+            _connection = new MySqlConnection(_connectionString);
+        }
+
+        return _connection;
     }
 }
