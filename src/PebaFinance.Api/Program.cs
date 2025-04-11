@@ -8,14 +8,12 @@ namespace FinanceApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Register services using DependencyInjection class
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication();
             builder.Services.AddApiServices();
 
             var app = builder.Build();
 
-            // Configure the HTTP pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

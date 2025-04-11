@@ -16,7 +16,6 @@ namespace PebaFinance.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            // Database Configuration
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<FinanceDbContext>(options =>
                 options.UseMySql(
@@ -28,49 +27,45 @@ namespace PebaFinance.Infrastructure
                         errorNumbersToAdd: null)
                 )
             );
-            
-            // Register Repositories
+
             services.AddScoped<IIncomeRepository, IncomeRepository>();
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
-            
+
             return services;
         }
-        
+
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            // Add MediatR
             services.AddMediatR(
-                Assembly.GetExecutingAssembly(), // Current assembly
-                Assembly.Load("PebaFinance.Application") // Application assembly containing handlers
+                Assembly.GetExecutingAssembly(),
+                Assembly.Load("PebaFinance.Application")
             );
 
-            // Add FluentValidation
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(Assembly.Load("PebaFinance.Application"));
-            
+
             return services;
         }
-        
+
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
-            // Add API services
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo 
                 { 
-                    Title = "Finance API", 
+                    Title = "Peba Finance API", 
                     Version = "v1",
                     Description = "API for finance management with income and expenses tracking",
                     Contact = new OpenApiContact
                     {
-                        Name = "Your Name",
-                        Email = "your.email@example.com"
+                        Name = "Lucas Hackmann",
+                        Email = "hackmann657@gmail.com"
                     }
                 });
             });
-            
+
             return services;
         }
     }
