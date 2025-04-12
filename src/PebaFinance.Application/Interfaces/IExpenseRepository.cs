@@ -10,4 +10,5 @@ public interface IExpenseRepository
     Task<int> AddAsync(Expense Expense);
     Task<bool> UpdateAsync(Expense Expense);
     Task<bool> DeleteAsync(int id);
+    Task<bool> ExistsByDescriptionAsync(string description);
 }

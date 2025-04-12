@@ -69,4 +69,12 @@ public class ExpenseRepository : IExpenseRepository
         var rowsAffected = await connection.ExecuteAsync(sql, expense);
         return rowsAffected > 0;
     }
+
+    public async Task<bool> ExistsByDescriptionAsync(string description)
+    {
+        const string sql = "SELECT COUNT(1) FROM expense WHERE Description = @Description";
+
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.ExecuteScalarAsync<int>(sql, new { Description = description }) > 0;
+    }
 }
