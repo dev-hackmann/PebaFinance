@@ -1,5 +1,6 @@
 using MediatR;
 using PebaFinance.Application.Commands;
+using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
 
@@ -22,6 +23,11 @@ public class UpdateExpensesCommandHandler : IRequestHandler<UpdateExpenseCommand
         expense.Description = request.Description;
         expense.Value = request.Value;
         expense.Date = request.Date;
+
+        if (await _repository.ExistsByDescriptionInTheSameMonthAsync(expense.Description, expense.Date))
+        {
+            throw new DuplicateDescriptionException(expense.Description, expense.Date);
+        }
 
         return await _repository.UpdateAsync(expense);
     }

@@ -1,7 +1,19 @@
+using System.Text.Json.Serialization;
 using MediatR;
 
 namespace PebaFinance.Application.Commands;
 
-public record CreateExpenseCommand(string Description, decimal Value, DateTime Date) : IRequest<int>;
-public record UpdateExpenseCommand(int Id, string Description, decimal Value, DateTime Date) : IRequest<bool>;
+public interface IExpenseCommand
+{
+    string Description { get; }
+    decimal Value { get; }
+    DateTime Date { get; }
+}
+
+public record CreateExpenseCommand(string Description, decimal Value, DateTime Date) : IRequest<int>, IExpenseCommand;
+public record UpdateExpenseCommand(string Description, decimal Value, DateTime Date) : IRequest<bool>, IExpenseCommand
+{
+    [JsonIgnore]
+    public int Id { get; set; }
+}
 public record DeleteExpenseCommand(int Id) : IRequest<bool>;
