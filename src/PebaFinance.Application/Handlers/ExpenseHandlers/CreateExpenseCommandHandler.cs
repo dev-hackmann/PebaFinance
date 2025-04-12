@@ -1,6 +1,7 @@
 using System;
 using MediatR;
 using PebaFinance.Application.Commands;
+using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
 
@@ -19,7 +20,7 @@ public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseCommand,
     {
         if (await _repository.ExistsByDescriptionAsync(request.Description))
         {
-            throw new InvalidOperationException("An expense with the same description already exists.");
+            throw new DuplicateDescriptionException(request.Description);
         }
 
         var Expense = new Expense

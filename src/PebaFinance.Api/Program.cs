@@ -1,4 +1,5 @@
 using PebaFinance.Infrastructure;
+using PebaFinance.Api.Middleware;
 
 namespace FinanceApi
 {
@@ -11,8 +12,14 @@ namespace FinanceApi
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication();
             builder.Services.AddApiServices();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(new ValidationFilter());
+            });
 
             var app = builder.Build();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
