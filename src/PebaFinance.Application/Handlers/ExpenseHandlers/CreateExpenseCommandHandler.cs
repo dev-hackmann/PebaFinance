@@ -1,4 +1,3 @@
-using System;
 using MediatR;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.Exceptions;
