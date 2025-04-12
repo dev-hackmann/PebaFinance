@@ -30,7 +30,6 @@
 				"ms-azuretools.vscode-docker",
 				"github.copilot",
 				"github.copilot-chat",
-				"eamodio.gitlens",
 				"docker.docker",
 				"patcx.vscode-nuget-gallery"
 			]
