@@ -2,13 +2,13 @@ using MediatR;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.Interfaces;
 
-namespace PebaFinance.Application.Handlers.ExpenseHandlers;
+namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 
-public class DeleteExpenseCommandHandler : IRequestHandler<DeleteExpenseCommand, bool>
+public class DeleteExpensesCommandHandler : IRequestHandler<DeleteExpenseCommand, bool>
 {
-    private readonly IExpenseRepository _repository;
+    private readonly IExpensesRepository _repository;
 
-    public DeleteExpenseCommandHandler(IExpenseRepository repository)
+    public DeleteExpensesCommandHandler(IExpensesRepository repository)
     {
         _repository = repository;
     }

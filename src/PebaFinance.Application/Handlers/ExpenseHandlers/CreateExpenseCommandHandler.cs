@@ -5,31 +5,31 @@ using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
 
-namespace PebaFinance.Application.Handlers.ExpenseHandlers;
+namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 
-public class CreateExpenseCommandHandler : IRequestHandler<CreateExpenseCommand, int>
+public class CreateExpensesCommandHandler : IRequestHandler<CreateExpenseCommand, int>
 {
-    private readonly IExpenseRepository _repository;
+    private readonly IExpensesRepository _repository;
 
-    public CreateExpenseCommandHandler(IExpenseRepository repository)
+    public CreateExpensesCommandHandler(IExpensesRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<int> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
     {
-        if (await _repository.ExistsByDescriptionAsync(request.Description))
+        if (await _repository.ExistsByDescriptionInTheSameMonthAsync(request.Description, request.Date))
         {
-            throw new DuplicateDescriptionException(request.Description);
+            throw new DuplicateDescriptionException(request.Description, request.Date);
         }
 
-        var Expense = new Expense
+        var expense = new Expense
         {
             Description = request.Description,
             Value = request.Value,
             Date = request.Date
         };
 
-        return await _repository.AddAsync(Expense);
+        return await _repository.AddAsync(expense);
     }
 }

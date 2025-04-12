@@ -3,26 +3,26 @@ using PebaFinance.Application.Commands;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
 
-namespace PebaFinance.Application.Handlers.IncomeHandlers;
+namespace PebaFinance.Application.Handlers.IncomesHandlers;
 
-public class CreateIncomeCommandHandler : IRequestHandler<CreateIncomeCommand, int>
+public class CreateIncomesCommandHandler : IRequestHandler<CreateIncomeCommand, int>
 {
-    private readonly IIncomeRepository _repository;
+    private readonly IIncomesRepository _repository;
 
-    public CreateIncomeCommandHandler(IIncomeRepository repository)
+    public CreateIncomesCommandHandler(IIncomesRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<int> Handle(CreateIncomeCommand request, CancellationToken cancellationToken)
     {
-        var Income = new Income
+        var income = new Income
         {
             Description = request.Description,
             Value = request.Value,
             Date = request.Date
         };
 
-        return await _repository.AddAsync(Income);
+        return await _repository.AddAsync(income);
     }
 }

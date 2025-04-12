@@ -6,11 +6,11 @@ using PebaFinance.Domain.Models;
 
 namespace PebaFinance.Infrastructure.Data.Repositories;
 
-public class IncomeRepository : IIncomeRepository
+public class IncomesRepository : IIncomesRepository
 {
     private readonly IDbConnectionFactory _connectionFactory;
 
-    public IncomeRepository(IDbConnectionFactory connectionFactory)
+    public IncomesRepository(IDbConnectionFactory connectionFactory)
     {
         _connectionFactory = connectionFactory;
     }

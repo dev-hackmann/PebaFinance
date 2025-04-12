@@ -1,8 +1,8 @@
 using System;
 
-namespace PebaFinance.Application.Handlers.ExpenseHandlers;
+namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 
-public class GetExpenseByDateRangeQueryHandler
+public class GetExpensesByDateRangeQueryHandler
 {
-
+    // Implementation for handling queries to get expenses by date range
 }

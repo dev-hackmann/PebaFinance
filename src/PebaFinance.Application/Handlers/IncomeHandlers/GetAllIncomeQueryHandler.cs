@@ -4,21 +4,21 @@ using PebaFinance.Application.DTOs;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Application.Queries;
 
-namespace PebaFinance.Application.Handlers.IncomeHandlers;
+namespace PebaFinance.Application.Handlers.IncomesHandlers;
 
-public class GetAllIncomeQueryHandler : IRequestHandler<GetAllIncomesQuery, IEnumerable<IncomeDto>>
+public class GetAllIncomesQueryHandler : IRequestHandler<GetAllIncomesQuery, IEnumerable<IncomeDto>>
 {
-    private readonly IIncomeRepository _repository;
+    private readonly IIncomesRepository _repository;
 
-    public GetAllIncomeQueryHandler(IIncomeRepository respository)
+    public GetAllIncomesQueryHandler(IIncomesRepository repository)
     {
-        _repository = respository;
+        _repository = repository;
     }
 
     public async Task<IEnumerable<IncomeDto>> Handle(GetAllIncomesQuery request, CancellationToken cancellationToken)
     {
-        var expenses = await _repository.GetAllAsync();
-        return expenses.Select(income => new IncomeDto
+        var incomes = await _repository.GetAllAsync();
+        return incomes.Select(income => new IncomeDto
         {
             Id = income.Id,
             Description = income.Description,

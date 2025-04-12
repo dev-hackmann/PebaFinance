@@ -2,13 +2,13 @@ using PebaFinance.Domain.Models;
 
 namespace PebaFinance.Application.Interfaces;
 
-public interface IExpenseRepository
+public interface IExpensesRepository
 {
     Task<Expense?> GetByIdAsync(int id);
     Task<IEnumerable<Expense>> GetAllAsync();
     Task<IEnumerable<Expense>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
-    Task<int> AddAsync(Expense Expense);
-    Task<bool> UpdateAsync(Expense Expense);
+    Task<int> AddAsync(Expense expense);
+    Task<bool> UpdateAsync(Expense expense);
     Task<bool> DeleteAsync(int id);
-    Task<bool> ExistsByDescriptionAsync(string description);
+    Task<bool> ExistsByDescriptionInTheSameMonthAsync(string description, DateTime date);
 }

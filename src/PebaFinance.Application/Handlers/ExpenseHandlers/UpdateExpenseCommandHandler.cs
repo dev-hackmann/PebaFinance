@@ -3,13 +3,13 @@ using PebaFinance.Application.Commands;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
 
-namespace PebaFinance.Application.Handlers.ExpenseHandlers;
+namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 
-public class UpdateExpenseCommandHandler : IRequestHandler<UpdateExpenseCommand, bool>
+public class UpdateExpensesCommandHandler : IRequestHandler<UpdateExpenseCommand, bool>
 {
-    private readonly IExpenseRepository _repository;
+    private readonly IExpensesRepository _repository;
 
-    public UpdateExpenseCommandHandler(IExpenseRepository repository)
+    public UpdateExpensesCommandHandler(IExpensesRepository repository)
     {
         _repository = repository;
     }

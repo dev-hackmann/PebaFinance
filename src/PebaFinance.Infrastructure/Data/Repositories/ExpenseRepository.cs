@@ -5,11 +5,11 @@ using PebaFinance.Domain.Models;
 
 namespace PebaFinance.Infrastructure.Data.Repositories;
 
-public class ExpenseRepository : IExpenseRepository
+public class ExpensesRepository : IExpensesRepository
 {
     private readonly IDbConnectionFactory _connectionFactory;
 
-    public ExpenseRepository(IDbConnectionFactory connectionFactory)
+    public ExpensesRepository(IDbConnectionFactory connectionFactory)
     {
         _connectionFactory = connectionFactory;
     }
@@ -70,11 +70,19 @@ public class ExpenseRepository : IExpenseRepository
         return rowsAffected > 0;
     }
 
-    public async Task<bool> ExistsByDescriptionAsync(string description)
+    public async Task<bool> ExistsByDescriptionInTheSameMonthAsync(string description, DateTime date)
     {
-        const string sql = "SELECT COUNT(1) FROM expense WHERE Description = @Description";
+        int year = date.Year;
+        int month = date.Month;
+
+        const string sql = @"
+            SELECT COUNT(1)
+            FROM expense
+            WHERE Description = @Description
+                AND YEAR(Date) = @Year 
+                AND MONTH(Date) = @Month";
 
         using var connection = _connectionFactory.CreateConnection();
-        return await connection.ExecuteScalarAsync<int>(sql, new { Description = description }) > 0;
+        return await connection.ExecuteScalarAsync<int>(sql, new { Description = description, Year = year, Month = month }) > 0;
     }
 }

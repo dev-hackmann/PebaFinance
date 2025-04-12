@@ -7,9 +7,9 @@ namespace PebaFinance.Application.Handlers.ExpenseHandlers;
 
 public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, ExpenseDto?>
 {
-    private readonly IExpenseRepository _repository;
+    private readonly IExpensesRepository _repository;
 
-    public GetExpenseByIdQueryHandler(IExpenseRepository repository)
+    public GetExpenseByIdQueryHandler(IExpensesRepository repository)
     {
         _repository = repository;
     }

@@ -3,13 +3,13 @@ using PebaFinance.Application.DTOs;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Application.Queries;
 
-namespace PebaFinance.Application.Handlers.ExpenseHandlers;
+namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 
-public class GetAllExpenseQueryHandler : IRequestHandler<GetAllExpensesQuery, IEnumerable<ExpenseDto>>
+public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, IEnumerable<ExpenseDto>>
 {
-    private readonly IExpenseRepository _repository;
+    private readonly IExpensesRepository _repository;
 
-    public GetAllExpenseQueryHandler(IExpenseRepository repository)
+    public GetAllExpensesQueryHandler(IExpensesRepository repository)
     {
         _repository = repository;
     }

@@ -3,28 +3,28 @@ using PebaFinance.Application.DTOs;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Application.Queries;
 
-namespace PebaFinance.Application.Handlers.IncomeHandlers;
+namespace PebaFinance.Application.Handlers.IncomesHandlers;
 
-public class GetIncomeByIdQueryHandler : IRequestHandler<GetIncomeByIdQuery, IncomeDto?>
+public class GetIncomesByIdQueryHandler : IRequestHandler<GetIncomeByIdQuery, IncomeDto?>
 {
-    private readonly IIncomeRepository _repository;
+    private readonly IIncomesRepository _repository;
 
-    public GetIncomeByIdQueryHandler(IIncomeRepository repository)
+    public GetIncomesByIdQueryHandler(IIncomesRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<IncomeDto?> Handle(GetIncomeByIdQuery request, CancellationToken cancellationToken)
     {
-        var Income = await _repository.GetByIdAsync(request.Id);
-        if (Income == null) return null;
+        var income = await _repository.GetByIdAsync(request.Id);
+        if (income == null) return null;
 
         return new IncomeDto
         {
-            Id = Income.Id,
-            Description = Income.Description,
-            Value = Income.Value,
-            Date = Income.Date
+            Id = income.Id,
+            Description = income.Description,
+            Value = income.Value,
+            Date = income.Date
         };
     }
 }

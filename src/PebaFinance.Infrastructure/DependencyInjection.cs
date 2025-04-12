@@ -19,8 +19,8 @@ namespace PebaFinance.Infrastructure
             services.AddSingleton<IDbConnectionFactory>(provider =>
                 new DbConnectionFactory(configuration));
 
-            services.AddScoped<IIncomeRepository, IncomeRepository>();
-            services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            services.AddScoped<IIncomesRepository, IncomesRepository>();
+            services.AddScoped<IExpensesRepository, ExpensesRepository>();
 
             return services;
         }
