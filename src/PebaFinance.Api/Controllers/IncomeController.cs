@@ -47,9 +47,7 @@ namespace PebaFinance.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, UpdateIncomeCommand command)
         {
-            if (id != command.Id)
-                return BadRequest();
-
+            command.Id = id;
             var result = await _mediator.Send(command);
 
             if (!result)

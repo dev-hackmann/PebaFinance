@@ -2,7 +2,6 @@ using MediatR;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
-using PebaFinance.Domain.Models;
 
 namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 
