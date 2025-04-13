@@ -17,8 +17,8 @@ public class ExpensesRepository : IExpensesRepository
     public async Task<int> AddAsync(Expense expense)
     {
         const string sql = @"
-            INSERT INTO expense (Description, Value, Date) 
-            VALUES (@Description, @Value, @Date);
+            INSERT INTO expense (Description, Value, Date, Category) 
+            VALUES (@Description, @Value, @Date, @Category);
             SELECT LAST_INSERT_ID();";
 
         using var connection = _connectionFactory.CreateConnection();

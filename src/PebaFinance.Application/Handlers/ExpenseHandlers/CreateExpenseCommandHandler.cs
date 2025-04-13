@@ -2,6 +2,7 @@ using MediatR;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
+using PebaFinance.Domain.Enums;
 using PebaFinance.Domain.Models;
 
 namespace PebaFinance.Application.Handlers.ExpensesHandlers;
@@ -22,12 +23,20 @@ public class CreateExpensesCommandHandler : IRequestHandler<CreateExpenseCommand
             throw new DuplicateDescriptionException(request.Description, request.Date);
         }
 
-        var expense = new Expense
+        ExpenseCategory? expenseCategory = null;
+        if (!string.IsNullOrWhiteSpace(request.Category))
         {
-            Description = request.Description,
-            Value = request.Value,
-            Date = request.Date
-        };
+            if (Enum.TryParse<ExpenseCategory>(request.Category, true, out var parsedCategory))
+            {
+                expenseCategory = parsedCategory;
+            }
+            else
+            {
+                throw new InvalidCategoryException(request.Category);
+            }
+        }
+
+        var expense = new Expense(request.Description, request.Value, request.Date, expenseCategory);
 
         return await _repository.AddAsync(expense);
     }

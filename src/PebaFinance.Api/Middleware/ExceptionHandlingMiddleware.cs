@@ -14,6 +14,7 @@ public class ExceptionHandlingMiddleware
     private static readonly Dictionary<Type, HttpStatusCode> ExceptionStatusCodeMapping = new()
     {
         { typeof(DuplicateDescriptionException), HttpStatusCode.Conflict },
+        { typeof(InvalidCategoryException), HttpStatusCode.BadRequest}
     };
 
     public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
