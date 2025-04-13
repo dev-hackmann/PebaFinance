@@ -1,9 +1,9 @@
 using PebaFinance.Infrastructure;
 using PebaFinance.Api.Middleware;
 
-namespace FinanceApi
+namespace PebaFinance
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {
