@@ -11,4 +11,5 @@ public interface IExpensesRepository
     Task<bool> UpdateAsync(Expense expense);
     Task<bool> DeleteAsync(int id);
     Task<bool> ExistsByDescriptionInTheSameMonthAsync(string description, DateTime date);
+    Task<bool> ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(int id, string description, DateTime date);
 }

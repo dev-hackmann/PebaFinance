@@ -11,7 +11,7 @@ public interface IExpenseCommand
 }
 
 public record CreateExpenseCommand(string Description, decimal Value, DateTime Date, string? Category) : IRequest<int>, IExpenseCommand;
-public record UpdateExpenseCommand(string Description, decimal Value, DateTime Date) : IRequest<bool>, IExpenseCommand
+public record UpdateExpenseCommand(string Description, decimal Value, DateTime Date, string? Category) : IRequest<bool>, IExpenseCommand
 {
     [JsonIgnore]
     public int Id { get; set; }

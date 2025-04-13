@@ -6,6 +6,8 @@ public class Expense : BaseEntity
 {
     public ExpenseCategory Category { get; private set; }
 
+    private Expense() { }
+
     public Expense(string description, decimal value, DateTime date, ExpenseCategory? category = null)
     {
         Description = description;

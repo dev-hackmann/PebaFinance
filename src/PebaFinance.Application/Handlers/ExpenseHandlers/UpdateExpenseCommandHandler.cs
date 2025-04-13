@@ -2,6 +2,8 @@ using MediatR;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
+using PebaFinance.Domain.Enums;
+using PebaFinance.Domain.Models;
 
 namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 
@@ -16,17 +18,30 @@ public class UpdateExpensesCommandHandler : IRequestHandler<UpdateExpenseCommand
 
     public async Task<bool> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
     {
-        var expense = await _repository.GetByIdAsync(request.Id);
-        if (expense == null) return false;
+        if (await _repository.GetByIdAsync(request.Id) == null) return false;
 
-        expense.Description = request.Description;
-        expense.Value = request.Value;
-        expense.Date = request.Date;
-
-        if (await _repository.ExistsByDescriptionInTheSameMonthAsync(expense.Description, expense.Date))
+        if (await _repository.ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(request.Id, request.Description, request.Date))
         {
-            throw new DuplicateDescriptionException(expense.Description, expense.Date);
+            throw new DuplicateDescriptionException(request.Description, request.Date);
         }
+
+        ExpenseCategory? expenseCategory = null;
+        if (!string.IsNullOrWhiteSpace(request.Category))
+        {
+            if (Enum.TryParse<ExpenseCategory>(request.Category, true, out var parsedCategory))
+            {
+                expenseCategory = parsedCategory;
+            }
+            else
+            {
+                throw new InvalidCategoryException(request.Category);
+            }
+        }
+
+        var expense = new Expense(request.Description, request.Value, request.Date, expenseCategory)
+        {
+            Id = request.Id
+        };
 
         return await _repository.UpdateAsync(expense);
     }
