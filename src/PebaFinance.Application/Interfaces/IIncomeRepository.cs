@@ -10,4 +10,5 @@ public interface IIncomesRepository
     Task<int> AddAsync(Income income);
     Task<bool> UpdateAsync(Income income);
     Task<bool> DeleteAsync(int id);
+    Task<bool> ExistsByDescriptionInTheSameMonthAsync(string description, DateTime date);
 }

@@ -1,5 +1,6 @@
 using MediatR;
 using PebaFinance.Application.Commands;
+using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
 
@@ -16,6 +17,11 @@ public class CreateIncomesCommandHandler : IRequestHandler<CreateIncomeCommand, 
 
     public async Task<int> Handle(CreateIncomeCommand request, CancellationToken cancellationToken)
     {
+        if (await _repository.ExistsByDescriptionInTheSameMonthAsync(request.Description, request.Date))
+        {
+            throw new DuplicateDescriptionException(request.Description, request.Date);
+        }
+
         var income = new Income
         {
             Description = request.Description,

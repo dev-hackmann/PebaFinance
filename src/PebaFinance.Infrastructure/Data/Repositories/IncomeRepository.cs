@@ -70,4 +70,20 @@ public class IncomesRepository : IIncomesRepository
         var rowsAffected = await connection.ExecuteAsync(sql, income);
         return rowsAffected > 0;
     }
+
+    public async Task<bool> ExistsByDescriptionInTheSameMonthAsync(string description, DateTime date)
+    {
+        int year = date.Year;
+        int month = date.Month;
+
+        const string sql = @"
+            SELECT COUNT(1)
+            FROM income
+            WHERE Description = @Description
+                AND YEAR(Date) = @Year 
+                AND MONTH(Date) = @Month";
+
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.ExecuteScalarAsync<int>(sql, new { Description = description, Year = year, Month = month }) > 0;
+    }
 }
