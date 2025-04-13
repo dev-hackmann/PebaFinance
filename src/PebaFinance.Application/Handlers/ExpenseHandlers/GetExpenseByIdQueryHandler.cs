@@ -24,7 +24,8 @@ public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, E
             Id = Expense.Id,
             Description = Expense.Description,
             Value = Expense.Value,
-            Date = Expense.Date
+            Date = Expense.Date,
+            Category = Expense.Category.ToString()
         };
     }
 }
