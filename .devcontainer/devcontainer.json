@@ -34,7 +34,8 @@
 				"github.copilot-chat",
 				"docker.docker",
 				"patcx.vscode-nuget-gallery",
-				"cweijan.vscode-mysql-client2"
+				"cweijan.vscode-mysql-client2",
+				"formulahendry.dotnet-test-explorer"
 			]
 		}
 	}
