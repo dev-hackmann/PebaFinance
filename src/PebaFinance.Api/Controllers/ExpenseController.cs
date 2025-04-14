@@ -18,9 +18,9 @@ namespace PebaFinance.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetAll([FromQuery] BaseFilterDto filter)
         {
-            var query = new GetAllExpensesQuery();
+            var query = new GetAllExpensesQuery(filter);
             var result = await _mediator.Send(query);
             return Ok(result);
         }

@@ -18,6 +18,12 @@ public class GetAllIncomesQueryHandler : IRequestHandler<GetAllIncomesQuery, IEn
     public async Task<IEnumerable<IncomeDto>> Handle(GetAllIncomesQuery request, CancellationToken cancellationToken)
     {
         var incomes = await _repository.GetAllAsync();
+
+        if (request.filter.description != null)
+        {
+            incomes = incomes.Where(expense => expense.Description.Contains(request.filter.description, StringComparison.OrdinalIgnoreCase));
+        }
+
         return incomes.Select(income => new IncomeDto
         {
             Id = income.Id,

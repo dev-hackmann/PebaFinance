@@ -17,6 +17,12 @@ public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, I
     public async Task<IEnumerable<ExpenseDto>> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
     {
         var expenses = await _repository.GetAllAsync();
+
+        if (request.filter.description != null)
+        {
+            expenses = expenses.Where(expense => expense.Description.Contains(request.filter.description, StringComparison.OrdinalIgnoreCase));
+        }
+
         return expenses.Select(expense => new ExpenseDto
         {
             Id = expense.Id,
