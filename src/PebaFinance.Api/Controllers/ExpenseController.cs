@@ -37,6 +37,15 @@ namespace PebaFinance.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{year}/{month}")]
+        public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetExpensesByYearAndMonth(int year, int month)
+        {
+            var query = new GetExpensesByYearAndMonthQuery(year, month);
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateExpenseCommand command)
         {

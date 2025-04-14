@@ -6,7 +6,7 @@ public interface IExpensesRepository
 {
     Task<Expense?> GetByIdAsync(int id);
     Task<IEnumerable<Expense>> GetAllAsync();
-    Task<IEnumerable<Expense>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
+    Task<IEnumerable<Expense>> GetExpensesByYearAndMonthAsync(int year, int month);
     Task<int> AddAsync(Expense expense);
     Task<bool> UpdateAsync(Expense expense);
     Task<bool> DeleteAsync(int id);

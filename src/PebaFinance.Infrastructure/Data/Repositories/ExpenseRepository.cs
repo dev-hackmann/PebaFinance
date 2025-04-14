@@ -77,20 +77,26 @@ public class ExpensesRepository : IExpensesRepository
         }
     }
 
-    public async Task<IEnumerable<Expense>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
+    public async Task<IEnumerable<Expense>> GetExpensesByYearAndMonthAsync(int year, int month)
     {
         try
         {
-            const string sql = "SELECT * FROM expense WHERE Date >= @StartDate AND Date <= @EndDate";
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1);
+
+            const string sql = @"
+            SELECT * FROM expense 
+            WHERE Date >= @StartDate AND Date < @EndDate";
 
             using var connection = _connectionFactory.CreateConnection();
             return await connection.QueryAsync<Expense>(sql, new { StartDate = startDate, EndDate = endDate });
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error accessing the database", ex);
+            throw new Exception("Error accessing the database", ex);
         }
     }
+
 
     public async Task<bool> UpdateAsync(Expense expense)
     {
