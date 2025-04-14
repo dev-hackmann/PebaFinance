@@ -21,6 +21,7 @@ namespace PebaFinance.Infrastructure
 
             services.AddScoped<IIncomesRepository, IncomesRepository>();
             services.AddScoped<IExpensesRepository, ExpensesRepository>();
+            services.AddScoped<ISummaryRepository, SummaryRepository>();
 
             return services;
         }

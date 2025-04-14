@@ -16,7 +16,7 @@ public class GetIncomesByYearAndMonthQueryHandler : IRequestHandler<GetIncomesBy
 
     public async Task<IEnumerable<IncomeDto>> Handle(GetIncomesByYearAndMonthQuery request, CancellationToken cancellationToken)
     {
-        var Incomes = await _repository.GetIncomesByYearAndMonthAsync(request.year, request.month);
+        var Incomes = await _repository.GetIncomeByYearAndMonthAsync(request.year, request.month);
         return Incomes.Select(Income => new IncomeDto
         {
             Id = Income.Id,

@@ -8,6 +8,6 @@ public enum ExpenseCategory
     Transportation = 4,
     Education = 5,
     Leisure = 6,
-    UnexpectedExpenses = 7,
+    Unexpected = 7,
     Others = 8
 }

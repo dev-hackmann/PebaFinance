@@ -1,5 +1,3 @@
-// src/PebaFinance.Infrastructure/Data/Repositories/IncomeRepository.cs
-using System.Data;
 using Dapper;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Domain.Models;
@@ -79,7 +77,7 @@ public class IncomesRepository : IIncomesRepository
         }
     }
 
-    public async Task<IEnumerable<Income>> GetIncomesByYearAndMonthAsync(int year, int month)
+    public async Task<IEnumerable<Income>> GetIncomeByYearAndMonthAsync(int year, int month)
     {
         try
         {
