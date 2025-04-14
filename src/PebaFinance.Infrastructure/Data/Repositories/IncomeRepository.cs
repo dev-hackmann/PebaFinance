@@ -79,18 +79,23 @@ public class IncomesRepository : IIncomesRepository
         }
     }
 
-    public async Task<IEnumerable<Income>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
+    public async Task<IEnumerable<Income>> GetIncomesByYearAndMonthAsync(int year, int month)
     {
         try
         {
-            const string sql = "SELECT * FROM income WHERE Date >= @StartDate AND Date <= @EndDate";
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1);
+
+            const string sql = @"
+            SELECT * FROM income 
+            WHERE Date >= @StartDate AND Date < @EndDate";
 
             using var connection = _connectionFactory.CreateConnection();
             return await connection.QueryAsync<Income>(sql, new { StartDate = startDate, EndDate = endDate });
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error accessing the database", ex);
+            throw new Exception("Error accessing the database", ex);
         }
     }
 

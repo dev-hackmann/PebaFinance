@@ -97,7 +97,6 @@ public class ExpensesRepository : IExpensesRepository
         }
     }
 
-
     public async Task<bool> UpdateAsync(Expense expense)
     {
         try
