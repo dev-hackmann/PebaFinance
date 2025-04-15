@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PebaFinance.Application.DTOs;
 using PebaFinance.Application.Queries;
@@ -16,6 +17,7 @@ namespace PebaFinance.Api.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpGet("{year}/{month}")]
         public async Task<ActionResult<SummaryDto>> GetSummaryByYearAndMonth(int year, int month)
         {

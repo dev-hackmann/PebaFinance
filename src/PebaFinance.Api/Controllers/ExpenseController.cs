@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.DTOs;
@@ -17,6 +18,7 @@ namespace PebaFinance.Api.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetAll([FromQuery] BaseFilterDto filter)
         {
@@ -25,6 +27,7 @@ namespace PebaFinance.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ExpenseDto>> Get(int id)
         {
@@ -37,6 +40,7 @@ namespace PebaFinance.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("{year}/{month}")]
         public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetExpensesByYearAndMonth(int year, int month)
         {
@@ -46,6 +50,7 @@ namespace PebaFinance.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateExpenseCommand command)
         {
@@ -53,6 +58,7 @@ namespace PebaFinance.Api.Controllers
             return CreatedAtAction(nameof(Get), new { id = result }, result);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, UpdateExpenseCommand command)
         {
@@ -65,6 +71,7 @@ namespace PebaFinance.Api.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

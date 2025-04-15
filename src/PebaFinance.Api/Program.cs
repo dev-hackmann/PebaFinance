@@ -28,6 +28,7 @@ namespace PebaFinance
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
 
