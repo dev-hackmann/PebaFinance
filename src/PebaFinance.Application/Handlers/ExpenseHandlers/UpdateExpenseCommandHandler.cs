@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using PebaFinance.Application.Commands;
 using PebaFinance.Application.Exceptions;
 using PebaFinance.Application.Interfaces;
@@ -10,17 +12,21 @@ namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 public class UpdateExpensesCommandHandler : IRequestHandler<UpdateExpenseCommand, bool>
 {
     private readonly IExpensesRepository _repository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UpdateExpensesCommandHandler(IExpensesRepository repository)
+    public UpdateExpensesCommandHandler(IExpensesRepository repository, IHttpContextAccessor httpContextAccessor)
     {
+        _httpContextAccessor = httpContextAccessor;
         _repository = repository;
     }
 
     public async Task<bool> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
     {
-        if (await _repository.GetByIdAsync(request.Id) == null) return false;
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        if (await _repository.ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(request.Id, request.Description, request.Date))
+        if (await _repository.GetByIdAsync(request.Id, userId) == null) return false;
+
+        if (await _repository.ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(request.Id, request.Description, request.Date, userId))
         {
             throw new DuplicateDescriptionException(request.Description, request.Date);
         }

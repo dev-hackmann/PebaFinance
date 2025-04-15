@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using PebaFinance.Application.DTOs;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Application.Queries;
@@ -8,15 +10,19 @@ namespace PebaFinance.Application.Handlers.ExpensesHandlers;
 public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, IEnumerable<ExpenseDto>>
 {
     private readonly IExpensesRepository _repository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public GetAllExpensesQueryHandler(IExpensesRepository repository)
+    public GetAllExpensesQueryHandler(IExpensesRepository repository, IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<IEnumerable<ExpenseDto>> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
     {
-        var expenses = await _repository.GetAllAsync();
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var expenses = await _repository.GetAllAsync(userId);
 
         if (request.filter.description != null)
         {

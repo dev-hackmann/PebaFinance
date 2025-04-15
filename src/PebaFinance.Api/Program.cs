@@ -12,6 +12,7 @@ namespace PebaFinance
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication();
             builder.Services.AddApiServices();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(new ValidationFilter());
