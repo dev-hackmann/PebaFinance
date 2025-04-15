@@ -30,6 +30,7 @@ namespace PebaFinance
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseCors("AllowFrontend");
             app.UseAuthorization();
             app.MapControllers();
 

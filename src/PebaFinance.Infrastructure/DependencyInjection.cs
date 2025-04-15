@@ -66,6 +66,17 @@ namespace PebaFinance.Infrastructure
 
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
