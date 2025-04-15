@@ -17,6 +17,14 @@ namespace PebaFinance.Api.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Retrieves a financial summary for a specific month and year.
+        /// </summary>
+        /// <param name="year">The year (2025).</param>
+        /// <param name="month">The month (1-12).</param>
+        /// <returns>Financial summary for the specified period.</returns>
+        /// <response code="200">Summary successfully retrieved.</response>
+        /// <response code="401">Unauthorized access.</response>
         [Authorize]
         [HttpGet("{year}/{month}")]
         public async Task<ActionResult<SummaryDto>> GetSummaryByYearAndMonth(int year, int month)

@@ -18,6 +18,13 @@ namespace PebaFinance.Api.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Retrieves all expenses.
+        /// </summary>
+        /// <param name="filter">Optional filter parameters.</param>
+        /// <returns>A list of expense records.</returns>
+        /// <response code="200">Expenses successfully retrieved.</response>
+        /// <response code="401">Unauthorized access.</response>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetAll([FromQuery] BaseFilterDto filter)
@@ -27,6 +34,14 @@ namespace PebaFinance.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves an expense by ID.
+        /// </summary>
+        /// <param name="id">The expense ID.</param>
+        /// <returns>The expense details.</returns>
+        /// <response code="200">Expense successfully retrieved.</response>
+        /// <response code="404">Expense not found.</response>
+        /// <response code="401">Unauthorized access.</response>
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ExpenseDto>> Get(int id)
@@ -40,6 +55,14 @@ namespace PebaFinance.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves expenses for a specific month and year.
+        /// </summary>
+        /// <param name="year">The year (2025).</param>
+        /// <param name="month">The month (1-12).</param>
+        /// <returns>List of expenses for the specified period.</returns>
+        /// <response code="200">Expenses successfully retrieved.</response>
+        /// <response code="401">Unauthorized access.</response>
         [Authorize]
         [HttpGet("{year}/{month}")]
         public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetExpensesByYearAndMonth(int year, int month)
@@ -50,6 +73,15 @@ namespace PebaFinance.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Creates a new expense.
+        /// </summary>
+        /// <param name="command">The expense data.</param>
+        /// <returns>The ID of the newly created expense.</returns>
+        /// <response code="201">Expense successfully created.</response>
+        /// <response code="400">Invalid input data.</response>
+        /// <response code="401">Unauthorized access.</response>
+        /// <response code="409">Duplicate description for the same month.</response>
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateExpenseCommand command)
@@ -58,6 +90,17 @@ namespace PebaFinance.Api.Controllers
             return CreatedAtAction(nameof(Get), new { id = result }, result);
         }
 
+        /// <summary>
+        /// Updates an existing expense.
+        /// </summary>
+        /// <param name="id">The expense ID.</param>
+        /// <param name="command">The updated expense data.</param>
+        /// <returns>No content if successful.</returns>
+        /// <response code="204">Expense successfully updated.</response>
+        /// <response code="400">Invalid input data.</response>
+        /// <response code="404">Expense not found.</response>
+        /// <response code="401">Unauthorized access.</response>
+        /// <response code="409">Duplicate description for the same month.</response>
         [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, UpdateExpenseCommand command)
@@ -71,6 +114,14 @@ namespace PebaFinance.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes an expense.
+        /// </summary>
+        /// <param name="id">The expense ID to delete.</param>
+        /// <returns>No content if successful.</returns>
+        /// <response code="204">Expense successfully deleted.</response>
+        /// <response code="404">Expense not found.</response>
+        /// <response code="401">Unauthorized access.</response>
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
