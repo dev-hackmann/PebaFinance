@@ -21,7 +21,7 @@ services:
     container_name: peba-finance-api
     restart: always
     ports:
-      - "5000:80"
+      - "5000:8080"
     depends_on:
       - peba-finance-db
 
