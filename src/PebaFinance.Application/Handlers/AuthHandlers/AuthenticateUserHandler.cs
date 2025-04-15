@@ -20,11 +20,18 @@ public class AuthenticateUserHandler : IRequestHandler<AuthenticateUserQuery, Lo
 
     public async Task<LoginResponseDto> Handle(AuthenticateUserQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email);
-        if (user is null || !_passwordHasher.Verify(user.PasswordHash, request.Password))
-            throw new UnauthorizedAccessException("Email or password are incorrect.");
+        try
+        {
+            var user = await _userRepository.GetByEmailAsync(request.Email);
+            if (user is null || !_passwordHasher.Verify(user.PasswordHash, request.Password))
+                throw new UnauthorizedAccessException("Email or password are incorrect.");
 
-        var token = _tokenGenerator.GenerateToken(user);
-        return new LoginResponseDto(user.Id, token);
+            var token = _tokenGenerator.GenerateToken(user);
+            return new LoginResponseDto(user.Id, token);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while authenticating the user.", ex);
+        }
     }
 }

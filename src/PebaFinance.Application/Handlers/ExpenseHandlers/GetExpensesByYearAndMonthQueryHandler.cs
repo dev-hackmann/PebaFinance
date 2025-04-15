@@ -20,16 +20,23 @@ public class GetExpensesByYearAndMonthQueryHandler : IRequestHandler<GetExpenses
 
     public async Task<IEnumerable<ExpenseDto>> Handle(GetExpensesByYearAndMonthQuery request, CancellationToken cancellationToken)
     {
-        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        var expenses = await _repository.GetExpensesByYearAndMonthAsync(request.year, request.month, userId);
-        
-        return expenses.Select(expense => new ExpenseDto
+        try
         {
-            Id = expense.Id,
-            Description = expense.Description,
-            Value = expense.Value,
-            Date = expense.Date,
-            Category = expense.Category.ToString(),
-        });
+            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var expenses = await _repository.GetExpensesByYearAndMonthAsync(request.year, request.month, userId);
+
+            return expenses.Select(expense => new ExpenseDto
+            {
+                Id = expense.Id,
+                Description = expense.Description,
+                Value = expense.Value,
+                Date = expense.Date,
+                Category = expense.Category.ToString(),
+            });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while getting the expense.", ex);
+        }
     }
 }

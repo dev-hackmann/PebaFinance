@@ -21,18 +21,25 @@ public class GetExpenseByIdQueryHandler : IRequestHandler<GetExpenseByIdQuery, E
 
     public async Task<ExpenseDto?> Handle(GetExpenseByIdQuery request, CancellationToken cancellationToken)
     {
-        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        var Expense = await _repository.GetByIdAsync(request.Id, userId);
-        if (Expense == null) return null;
-
-        return new ExpenseDto
+        try
         {
-            Id = Expense.Id,
-            Description = Expense.Description,
-            Value = Expense.Value,
-            Date = Expense.Date,
-            Category = Expense.Category.ToString()
-        };
+            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var Expense = await _repository.GetByIdAsync(request.Id, userId);
+            if (Expense == null) return null;
+
+            return new ExpenseDto
+            {
+                Id = Expense.Id,
+                Description = Expense.Description,
+                Value = Expense.Value,
+                Date = Expense.Date,
+                Category = Expense.Category.ToString()
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while getting the expense.", ex);
+        }
     }
 }

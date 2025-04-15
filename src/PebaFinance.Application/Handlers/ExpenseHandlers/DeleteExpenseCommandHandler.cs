@@ -19,7 +19,14 @@ public class DeleteExpensesCommandHandler : IRequestHandler<DeleteExpenseCommand
 
     public async Task<bool> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
     {
-        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        return await _repository.DeleteAsync(request.Id, userId);
+        try
+        {
+            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            return await _repository.DeleteAsync(request.Id, userId);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while deleting the expense.", ex);
+        }
     }
 }

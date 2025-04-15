@@ -21,21 +21,28 @@ public class CreateIncomesCommandHandler : IRequestHandler<CreateIncomeCommand, 
 
     public async Task<int> Handle(CreateIncomeCommand request, CancellationToken cancellationToken)
     {
-        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        if (await _repository.ExistsByDescriptionInTheSameMonthAsync(request.Description, request.Date, userId))
+        try
         {
-            throw new DuplicateDescriptionException(request.Description, request.Date);
+            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            if (await _repository.ExistsByDescriptionInTheSameMonthAsync(request.Description, request.Date, userId))
+            {
+                throw new DuplicateDescriptionException(request.Description, request.Date);
+            }
+
+            var income = new Income
+            {
+                Description = request.Description,
+                Value = request.Value,
+                Date = request.Date,
+                UserId = userId
+            };
+
+            return await _repository.AddAsync(income);
         }
-
-        var income = new Income
+        catch (Exception ex)
         {
-            Description = request.Description,
-            Value = request.Value,
-            Date = request.Date,
-            UserId = userId
-        };
-
-        return await _repository.AddAsync(income);
+            throw new Exception("An error occurred while creating the income.", ex);
+        }
     }
 }

@@ -22,33 +22,40 @@ public class UpdateExpensesCommandHandler : IRequestHandler<UpdateExpenseCommand
 
     public async Task<bool> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
     {
-        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        if (await _repository.GetByIdAsync(request.Id, userId) == null) return false;
-
-        if (await _repository.ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(request.Id, request.Description, request.Date, userId))
+        try
         {
-            throw new DuplicateDescriptionException(request.Description, request.Date);
-        }
+            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        ExpenseCategory? expenseCategory = null;
-        if (!string.IsNullOrWhiteSpace(request.Category))
-        {
-            if (Enum.TryParse<ExpenseCategory>(request.Category, true, out var parsedCategory))
+            if (await _repository.GetByIdAsync(request.Id, userId) == null) return false;
+
+            if (await _repository.ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(request.Id, request.Description, request.Date, userId))
             {
-                expenseCategory = parsedCategory;
+                throw new DuplicateDescriptionException(request.Description, request.Date);
             }
-            else
+
+            ExpenseCategory? expenseCategory = null;
+            if (!string.IsNullOrWhiteSpace(request.Category))
             {
-                throw new InvalidCategoryException(request.Category);
+                if (Enum.TryParse<ExpenseCategory>(request.Category, true, out var parsedCategory))
+                {
+                    expenseCategory = parsedCategory;
+                }
+                else
+                {
+                    throw new InvalidCategoryException(request.Category);
+                }
             }
+
+            var expense = new Expense(request.Description, request.Value, request.Date, userId, expenseCategory)
+            {
+                Id = request.Id
+            };
+
+            return await _repository.UpdateAsync(expense);
         }
-
-        var expense = new Expense(request.Description, request.Value, request.Date, userId, expenseCategory)
+        catch (Exception ex)
         {
-            Id = request.Id
-        };
-
-        return await _repository.UpdateAsync(expense);
+            throw new Exception("An error occurred while updating the expense.", ex);
+        }
     }
 }

@@ -20,17 +20,24 @@ public class GetIncomesByIdQueryHandler : IRequestHandler<GetIncomeByIdQuery, In
 
     public async Task<IncomeDto?> Handle(GetIncomeByIdQuery request, CancellationToken cancellationToken)
     {
-        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        var income = await _repository.GetByIdAsync(request.Id, userId);
-        if (income == null) return null;
-
-        return new IncomeDto
+        try
         {
-            Id = income.Id,
-            Description = income.Description,
-            Value = income.Value,
-            Date = income.Date
-        };
+            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var income = await _repository.GetByIdAsync(request.Id, userId);
+            if (income == null) return null;
+
+            return new IncomeDto
+            {
+                Id = income.Id,
+                Description = income.Description,
+                Value = income.Value,
+                Date = income.Date
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while getting the income.", ex);
+        }
     }
 }
