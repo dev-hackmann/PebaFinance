@@ -20,29 +20,22 @@ public class GetAllExpensesQueryHandler : IRequestHandler<GetAllExpensesQuery, I
 
     public async Task<IEnumerable<ExpenseDto>> Handle(GetAllExpensesQuery request, CancellationToken cancellationToken)
     {
-        try
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var expenses = await _repository.GetAllAsync(userId);
+
+        if (request.filter.description != null)
         {
-            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            var expenses = await _repository.GetAllAsync(userId);
-
-            if (request.filter.description != null)
-            {
-                expenses = expenses.Where(expense => expense.Description.Contains(request.filter.description, StringComparison.OrdinalIgnoreCase));
-            }
-
-            return expenses.Select(expense => new ExpenseDto
-            {
-                Id = expense.Id,
-                Description = expense.Description,
-                Value = expense.Value,
-                Date = expense.Date,
-                Category = expense.Category.ToString(),
-            });
+            expenses = expenses.Where(expense => expense.Description.Contains(request.filter.description, StringComparison.OrdinalIgnoreCase));
         }
-        catch (Exception ex)
+
+        return expenses.Select(expense => new ExpenseDto
         {
-            throw new Exception("An error occurred while getting the expense.", ex);
-        }
+            Id = expense.Id,
+            Description = expense.Description,
+            Value = expense.Value,
+            Date = expense.Date,
+            Category = expense.Category.ToString(),
+        });
     }
 }

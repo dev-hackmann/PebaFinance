@@ -20,22 +20,15 @@ public class GetIncomesByYearAndMonthQueryHandler : IRequestHandler<GetIncomesBy
 
     public async Task<IEnumerable<IncomeDto>> Handle(GetIncomesByYearAndMonthQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var Incomes = await _repository.GetIncomeByYearAndMonthAsync(request.year, request.month, userId);
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var Incomes = await _repository.GetIncomeByYearAndMonthAsync(request.year, request.month, userId);
 
-            return Incomes.Select(Income => new IncomeDto
-            {
-                Id = Income.Id,
-                Description = Income.Description,
-                Value = Income.Value,
-                Date = Income.Date,
-            });
-        }
-        catch (Exception ex)
+        return Incomes.Select(Income => new IncomeDto
         {
-            throw new Exception("An error occurred while getting the income.", ex);
-        }
+            Id = Income.Id,
+            Description = Income.Description,
+            Value = Income.Value,
+            Date = Income.Date,
+        });
     }
 }

@@ -19,14 +19,7 @@ public class DeleteIncomesCommandHandler : IRequestHandler<DeleteIncomeCommand, 
 
     public async Task<bool> Handle(DeleteIncomeCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            return await _repository.DeleteAsync(request.Id, userId);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("An error occurred while deleting the income.", ex);
-        }
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        return await _repository.DeleteAsync(request.Id, userId);
     }
 }

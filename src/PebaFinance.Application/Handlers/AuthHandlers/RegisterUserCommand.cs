@@ -17,24 +17,18 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, bool>
 
     public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        try
+        var existingUser = await _userRepository.GetByEmailAsync(request.Email);
+        if (existingUser != null)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(request.Email);
-            if (existingUser != null)
-            {
-                throw new EmailAlreadyRegisteredException();
-            }
-
-            var hashedPassword = _passwordHasher.Hash(request.Password);
-
-            var newUser = new User(request.Name, request.Email, hashedPassword);
-            await _userRepository.AddAsync(newUser);
-
-            return true;
+            throw new EmailAlreadyRegisteredException();
         }
-        catch (Exception ex)
-        {
-            throw new Exception("An error occurred while registering the user.", ex);
-        }
+
+        var hashedPassword = _passwordHasher.Hash(request.Password);
+
+        var newUser = new User(request.Name, request.Email, hashedPassword);
+
+        await _userRepository.AddAsync(newUser);
+
+        return true;
     }
 }

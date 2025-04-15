@@ -22,40 +22,33 @@ public class UpdateExpensesCommandHandler : IRequestHandler<UpdateExpenseCommand
 
     public async Task<bool> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
     {
-        try
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        if (await _repository.GetByIdAsync(request.Id, userId) == null) return false;
+
+        if (await _repository.ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(request.Id, request.Description, request.Date, userId))
         {
-            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            if (await _repository.GetByIdAsync(request.Id, userId) == null) return false;
-
-            if (await _repository.ExistsByDescriptionInTheSameMonthWithDifferentIdAsync(request.Id, request.Description, request.Date, userId))
-            {
-                throw new DuplicateDescriptionException(request.Description, request.Date);
-            }
-
-            ExpenseCategory? expenseCategory = null;
-            if (!string.IsNullOrWhiteSpace(request.Category))
-            {
-                if (Enum.TryParse<ExpenseCategory>(request.Category, true, out var parsedCategory))
-                {
-                    expenseCategory = parsedCategory;
-                }
-                else
-                {
-                    throw new InvalidCategoryException(request.Category);
-                }
-            }
-
-            var expense = new Expense(request.Description, request.Value, request.Date, userId, expenseCategory)
-            {
-                Id = request.Id
-            };
-
-            return await _repository.UpdateAsync(expense);
+            throw new DuplicateDescriptionException(request.Description, request.Date);
         }
-        catch (Exception ex)
+
+        ExpenseCategory? expenseCategory = null;
+        if (!string.IsNullOrWhiteSpace(request.Category))
         {
-            throw new Exception("An error occurred while updating the expense.", ex);
+            if (Enum.TryParse<ExpenseCategory>(request.Category, true, out var parsedCategory))
+            {
+                expenseCategory = parsedCategory;
+            }
+            else
+            {
+                throw new InvalidCategoryException(request.Category);
+            }
         }
+
+        var expense = new Expense(request.Description, request.Value, request.Date, userId, expenseCategory)
+        {
+            Id = request.Id
+        };
+
+        return await _repository.UpdateAsync(expense);
     }
 }

@@ -20,28 +20,21 @@ public class GetAllIncomesQueryHandler : IRequestHandler<GetAllIncomesQuery, IEn
 
     public async Task<IEnumerable<IncomeDto>> Handle(GetAllIncomesQuery request, CancellationToken cancellationToken)
     {
-        try
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var incomes = await _repository.GetAllAsync(userId);
+
+        if (request.filter.description != null)
         {
-            var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            var incomes = await _repository.GetAllAsync(userId);
-
-            if (request.filter.description != null)
-            {
-                incomes = incomes.Where(expense => expense.Description.Contains(request.filter.description, StringComparison.OrdinalIgnoreCase));
-            }
-
-            return incomes.Select(income => new IncomeDto
-            {
-                Id = income.Id,
-                Description = income.Description,
-                Value = income.Value,
-                Date = income.Date
-            });
+            incomes = incomes.Where(expense => expense.Description.Contains(request.filter.description, StringComparison.OrdinalIgnoreCase));
         }
-        catch (Exception ex)
+
+        return incomes.Select(income => new IncomeDto
         {
-            throw new Exception("An error occurred while getting the income.", ex);
-        }
+            Id = income.Id,
+            Description = income.Description,
+            Value = income.Value,
+            Date = income.Date
+        });
     }
 }
