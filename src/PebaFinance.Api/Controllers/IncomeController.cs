@@ -8,7 +8,7 @@ using PebaFinance.Application.Queries;
 namespace PebaFinance.Api.Controllers
 {
     [ApiController]
-    [Route("api/income")]
+    [Route("api/v1/income")]
     public class IncomeController : ControllerBase
     {
         private readonly IMediator _mediator;

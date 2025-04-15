@@ -6,7 +6,7 @@ using PebaFinance.Application.Queries;
 
 namespace PebaFinance.Api.Controllers
 {
-    [Route("api/summary")]
+    [Route("api/v1/summary")]
     [ApiController]
     public class SummaryController : ControllerBase
     {

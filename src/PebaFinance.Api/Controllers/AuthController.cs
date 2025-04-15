@@ -7,7 +7,7 @@ using PebaFinance.Application.DTOs;
 namespace PebaFinance.API.Controllers;
 
 [ApiController]
-[Route("api/auth")]
+[Route("api/v1/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -24,7 +24,7 @@ public class ExpenseControllerTests : IClassFixture<WebApplicationFactory<PebaFi
         var command = new CreateExpenseCommand(uniqueDescription, 100, DateTime.Now);
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/expenses", command);
+        var response = await _client.PostAsJsonAsync("/api/v1/expenses", command);
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -34,7 +34,7 @@ public class ExpenseControllerTests : IClassFixture<WebApplicationFactory<PebaFi
     public async Task GetExpense_ShouldReturnNotFound_WhenExpenseDoesNotExist()
     {
         // Act
-        var response = await _client.GetAsync("/api/expenses/999");
+        var response = await _client.GetAsync("/api/v1/expenses/999");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
