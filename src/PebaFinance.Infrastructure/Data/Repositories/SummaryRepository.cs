@@ -13,7 +13,7 @@ public class SummaryRepository : ISummaryRepository
         _connectionFactory = connectionFactory;
     }
 
-    public async Task<IEnumerable<SummaryByCategory>> GetSummaryByYearAndMonthAsync(int year, int month)
+    public async Task<IEnumerable<SummaryExpensesByCategory>> GetSummaryByYearAndMonthAsync(int year, int month, int userId)
     {
         try
         {
@@ -25,12 +25,13 @@ public class SummaryRepository : ISummaryRepository
                 category, 
                 SUM(value) AS total
             FROM expense 
-            WHERE Date >= @StartDate 
-                AND Date < @EndDate
+            WHERE date >= @StartDate 
+                AND date < @EndDate
+                AND user_id = @UserId
             GROUP BY category;";
 
             using var connection = _connectionFactory.CreateConnection();
-            return await connection.QueryAsync<SummaryByCategory>(sql, new { StartDate = startDate, EndDate = endDate });
+            return await connection.QueryAsync<SummaryExpensesByCategory>(sql, new { StartDate = startDate, EndDate = endDate, UserId = userId });
         }
         catch (Exception ex)
         {

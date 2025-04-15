@@ -17,12 +17,14 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            const string sql = @"SELECT 
-                                    name, 
-                                    email,
-                                    passwordhash
-                                 FROM user 
-                                 WHERE email = @Email";
+            const string sql = @"
+            SELECT 
+                id as Id, 
+                name as Name, 
+                email as Email, 
+                password_hash as PasswordHash
+            FROM user 
+            WHERE email = @Email";
 
             using var connection = _connectionFactory.CreateConnection();
             return await connection.QuerySingleOrDefaultAsync<User>(sql, new { Email = email });
@@ -38,7 +40,7 @@ public class UserRepository : IUserRepository
         try
         {
             const string sql = @"
-            INSERT INTO user (Name, Email, PasswordHash) 
+            INSERT INTO user (name, email, password_hash) 
             VALUES (@Name, @Email, @PasswordHash);
             SELECT LAST_INSERT_ID();";
 

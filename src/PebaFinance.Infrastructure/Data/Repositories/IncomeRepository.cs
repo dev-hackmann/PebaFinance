@@ -18,8 +18,8 @@ public class IncomesRepository : IIncomesRepository
         try
         {
             const string sql = @"
-            INSERT INTO income (Description, Value, Date) 
-            VALUES (@Description, @Value, @Date);
+            INSERT INTO income (description, value, date, user_id) 
+            VALUES (@Description, @Value, @Date, @UserId);
             SELECT LAST_INSERT_ID();";
 
             using var connection = _connectionFactory.CreateConnection();
@@ -31,14 +31,14 @@ public class IncomesRepository : IIncomesRepository
         }
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id, int userId)
     {
         try
         {
-            const string sql = "DELETE FROM income WHERE Id = @Id";
+            const string sql = "DELETE FROM income WHERE id = @Id AND user_id = @UserId";
 
             using var connection = _connectionFactory.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id });
+            var rowsAffected = await connection.ExecuteAsync(sql, new { Id = id, UserId = userId });
             return rowsAffected > 0;
         }
         catch (Exception ex)
@@ -47,14 +47,14 @@ public class IncomesRepository : IIncomesRepository
         }
     }
 
-    public async Task<IEnumerable<Income>> GetAllAsync()
+    public async Task<IEnumerable<Income>> GetAllAsync(int userId)
     {
         try
         {
-            const string sql = "SELECT * FROM income";
+            const string sql = "SELECT * FROM income WHERE user_id = @UserId";
 
             using var connection = _connectionFactory.CreateConnection();
-            return await connection.QueryAsync<Income>(sql);
+            return await connection.QueryAsync<Income>(sql, new { UserId = userId });
         }
         catch (Exception ex)
         {
@@ -62,14 +62,14 @@ public class IncomesRepository : IIncomesRepository
         }
     }
 
-    public async Task<Income?> GetByIdAsync(int id)
+    public async Task<Income?> GetByIdAsync(int id, int userId)
     {
         try
         {
-            const string sql = "SELECT * FROM income WHERE Id = @Id";
+            const string sql = "SELECT * FROM income WHERE id = @Id AND user_id = @UserId";
 
             using var connection = _connectionFactory.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<Income>(sql, new { Id = id });
+            return await connection.QuerySingleOrDefaultAsync<Income>(sql, new { Id = id, UserId = userId });
         }
         catch (Exception ex)
         {
@@ -77,7 +77,7 @@ public class IncomesRepository : IIncomesRepository
         }
     }
 
-    public async Task<IEnumerable<Income>> GetIncomeByYearAndMonthAsync(int year, int month)
+    public async Task<IEnumerable<Income>> GetIncomeByYearAndMonthAsync(int year, int month, int userId)
     {
         try
         {
@@ -86,10 +86,11 @@ public class IncomesRepository : IIncomesRepository
 
             const string sql = @"
             SELECT * FROM income 
-            WHERE Date >= @StartDate AND Date < @EndDate";
+            WHERE date >= @StartDate AND date < @EndDate
+                AND user_id = @UserId";
 
             using var connection = _connectionFactory.CreateConnection();
-            return await connection.QueryAsync<Income>(sql, new { StartDate = startDate, EndDate = endDate });
+            return await connection.QueryAsync<Income>(sql, new { StartDate = startDate, EndDate = endDate, UserId = userId });
         }
         catch (Exception ex)
         {
@@ -103,8 +104,9 @@ public class IncomesRepository : IIncomesRepository
         {
             const string sql = @"
             UPDATE income 
-            SET Description = @Description, Value = @Value, Date = @Date
-            WHERE Id = @Id";
+            SET description = @Description, value = @Value, date = @Date
+            WHERE id = @Id 
+                AND user_id = @UserId";
 
             using var connection = _connectionFactory.CreateConnection();
             var rowsAffected = await connection.ExecuteAsync(sql, income);
@@ -116,7 +118,7 @@ public class IncomesRepository : IIncomesRepository
         }
     }
 
-    public async Task<bool> ExistsByDescriptionInTheSameMonthAsync(string description, DateTime date)
+    public async Task<bool> ExistsByDescriptionInTheSameMonthAsync(string description, DateTime date, int userId)
     {
         try
         {
@@ -126,12 +128,13 @@ public class IncomesRepository : IIncomesRepository
             const string sql = @"
             SELECT COUNT(1)
             FROM income
-            WHERE Description = @Description
-                AND YEAR(Date) = @Year 
-                AND MONTH(Date) = @Month";
+            WHERE description = @Description
+                AND YEAR(date) = @Year 
+                AND MONTH(date) = @Month
+                AND user_id = @UserId";
 
             using var connection = _connectionFactory.CreateConnection();
-            return await connection.ExecuteScalarAsync<int>(sql, new { Description = description, Year = year, Month = month }) > 0;
+            return await connection.ExecuteScalarAsync<int>(sql, new { Description = description, Year = year, Month = month, UserId = userId }) > 0;
         }
         catch (Exception ex)
         {

@@ -42,7 +42,7 @@ public class CreateExpensesCommandHandler : IRequestHandler<CreateExpenseCommand
             }
         }
 
-        var expense = new Expense(request.Description, request.Value, request.Date, expenseCategory);
+        var expense = new Expense(request.Description, request.Value, request.Date, userId, expenseCategory);
 
         return await _repository.AddAsync(expense);
     }

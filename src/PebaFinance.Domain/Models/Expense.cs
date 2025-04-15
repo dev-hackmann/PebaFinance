@@ -6,13 +6,14 @@ public class Expense : BaseEntity
 {
     public ExpenseCategory Category { get; private set; }
 
-    private Expense() { }
+    public Expense() { }
 
-    public Expense(string description, decimal value, DateTime date, ExpenseCategory? category = null)
+    public Expense(string description, decimal value, DateTime date, int userId, ExpenseCategory? category = null)
     {
         Description = description;
         Value = value;
         Date = date;
         Category = category ?? ExpenseCategory.Others;
+        UserId = userId;
     }
 }

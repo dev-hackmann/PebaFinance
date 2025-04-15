@@ -4,5 +4,5 @@ namespace PebaFinance.Application.Interfaces;
 
 public interface ISummaryRepository
 {
-    Task<IEnumerable<SummaryByCategory>> GetSummaryByYearAndMonthAsync(int year, int month);
+    Task<IEnumerable<SummaryExpensesByCategory>> GetSummaryByYearAndMonthAsync(int year, int month, int userId);
 }

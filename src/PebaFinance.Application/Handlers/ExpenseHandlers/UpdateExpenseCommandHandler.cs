@@ -44,7 +44,7 @@ public class UpdateExpensesCommandHandler : IRequestHandler<UpdateExpenseCommand
             }
         }
 
-        var expense = new Expense(request.Description, request.Value, request.Date, expenseCategory)
+        var expense = new Expense(request.Description, request.Value, request.Date, userId, expenseCategory)
         {
             Id = request.Id
         };

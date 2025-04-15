@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using PebaFinance.Application.DTOs;
 using PebaFinance.Application.Interfaces;
 using PebaFinance.Application.Queries;
@@ -8,15 +10,19 @@ namespace PebaFinance.Application.Handlers.IncomesHandlers;
 public class GetIncomesByIdQueryHandler : IRequestHandler<GetIncomeByIdQuery, IncomeDto?>
 {
     private readonly IIncomesRepository _repository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public GetIncomesByIdQueryHandler(IIncomesRepository repository)
+    public GetIncomesByIdQueryHandler(IIncomesRepository repository, IHttpContextAccessor httpContextAccessor)
     {
+        _httpContextAccessor = httpContextAccessor;
         _repository = repository;
     }
 
     public async Task<IncomeDto?> Handle(GetIncomeByIdQuery request, CancellationToken cancellationToken)
     {
-        var income = await _repository.GetByIdAsync(request.Id);
+        var userId = int.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var income = await _repository.GetByIdAsync(request.Id, userId);
         if (income == null) return null;
 
         return new IncomeDto

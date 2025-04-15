@@ -7,10 +7,10 @@ public class Summary
     public decimal TotalIncome { get; set; }
     public decimal TotalExpenses { get; set; }
     public decimal FinalBalance { get; set; }
-    public List<SummaryByCategory> SummaryByCategory { get; set; } = new();
+    public List<SummaryExpensesByCategory> SummaryExpensesByCategory { get; set; } = new();
 }
 
-public class SummaryByCategory
+public class SummaryExpensesByCategory
 {
     public ExpenseCategory Category { get; set; }
     public decimal Total { get; set; }

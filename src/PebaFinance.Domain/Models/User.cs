@@ -7,6 +7,8 @@ public class User
     public string Email { get; private set; }
     public string PasswordHash { get; private set; }
 
+    public User() { }
+
     public User(string name, string email, string passwordHash)
     {
         Name = name;
