@@ -17,6 +17,13 @@ public class AuthController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Registers a new user.
+    /// </summary>
+    /// <param name="command">The registration data.</param>
+    /// <returns>The ID of the newly created user.</returns>
+    /// <response code="201">User successfully registered.</response>
+    /// <response code="400">Invalid input data.</response>
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
     {
@@ -24,6 +31,14 @@ public class AuthController : ControllerBase
         return CreatedAtAction(nameof(Register), new { id = result }, result);
     }
 
+
+    /// <summary>
+    /// Authenticates a user and returns a JWT token.
+    /// </summary>
+    /// <param name="query">The user login credentials.</param>
+    /// <returns>JWT token and authenticated user info.</returns>
+    /// <response code="200">Login successful.</response>
+    /// <response code="401">Invalid credentials.</response>
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> Login([FromBody] AuthenticateUserQuery query)
     {

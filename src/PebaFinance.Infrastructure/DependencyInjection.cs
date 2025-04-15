@@ -82,6 +82,10 @@ namespace PebaFinance.Infrastructure
                     }
                 });
 
+                var xmlFile = $"PebaFinance.Api.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "Insert the token JWT on this way: Bearer {token}",
