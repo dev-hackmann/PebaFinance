@@ -1,6 +1,7 @@
 using PebaFinance.Infrastructure;
 using PebaFinance.Api.Middleware;
 using DotNetEnv;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace PebaFinance
 {
@@ -19,6 +20,13 @@ namespace PebaFinance
             {
                 options.Filters.Add(new ValidationFilter());
             });
+            builder.Services.AddHealthChecks()
+                .AddMySql(
+                    connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+                    name: "mysql",
+                    failureStatus: HealthStatus.Unhealthy,
+                    timeout: TimeSpan.FromSeconds(5)
+                );
 
             var app = builder.Build();
 
@@ -35,6 +43,7 @@ namespace PebaFinance
             app.UseCors("AllowFrontend");
             app.UseAuthorization();
             app.MapControllers();
+            app.MapHealthChecks("/health");
 
             app.Run();
         }
