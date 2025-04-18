@@ -9,7 +9,7 @@ namespace PebaFinance
     {
         public static void Main(string[] args)
         {
-            Env.Load();
+            Env.Load("../../.env");
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddInfrastructure(builder.Configuration);

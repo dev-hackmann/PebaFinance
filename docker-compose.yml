@@ -4,7 +4,7 @@ services:
     container_name: peba-finance-db
     restart: always
     env_file:
-      - src/PebaFinance.Api/.env
+      - .env
     ports:
       - "3306:3306"
     volumes:
@@ -22,7 +22,7 @@ services:
     depends_on:
       - peba-finance-db
     env_file:
-      - src/PebaFinance.Api/.env
+      - .env
 
 volumes:
   mysql-data:
