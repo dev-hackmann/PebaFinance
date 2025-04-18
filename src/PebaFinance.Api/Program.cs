@@ -2,6 +2,8 @@ using PebaFinance.Infrastructure;
 using PebaFinance.Api.Middleware;
 using DotNetEnv;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using FluentMigrator.Runner;
+using PebaFinance.Migrations;
 
 namespace PebaFinance
 {
@@ -27,6 +29,12 @@ namespace PebaFinance
                     failureStatus: HealthStatus.Unhealthy,
                     timeout: TimeSpan.FromSeconds(5)
                 );
+            builder.Services.AddFluentMigratorCore()
+            .ConfigureRunner(rb => rb
+                .AddMySql()
+                .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DefaultConnection"))
+                .ScanIn(typeof(CreateInitialSchema).Assembly).For.Migrations())
+            .AddLogging(lb => lb.AddFluentMigratorConsole());
 
             var app = builder.Build();
 
