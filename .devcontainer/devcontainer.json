@@ -35,7 +35,9 @@
 				"docker.docker",
 				"patcx.vscode-nuget-gallery",
 				"cweijan.vscode-mysql-client2",
-				"formulahendry.dotnet-test-explorer"
+				"formulahendry.dotnet-test-explorer",
+				"ms-dotnettools.vscodeintellicode-csharp",
+				"formulahendry.dotnet"
 			]
 		}
 	}

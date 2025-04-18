@@ -1,13 +1,10 @@
-version: '3.8'
-
 services:
   peba-finance-db:
     image: mysql:8.0
     container_name: peba-finance-db
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: abcv123
-      MYSQL_DATABASE: peba_finance
+    env_file:
+      - src/PebaFinance.Api/.env
     ports:
       - "3306:3306"
     volumes:
@@ -24,6 +21,8 @@ services:
       - "5000:8080"
     depends_on:
       - peba-finance-db
+    env_file:
+      - src/PebaFinance.Api/.env
 
 volumes:
   mysql-data:

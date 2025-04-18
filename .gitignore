@@ -149,3 +149,4 @@
 *.idea/
 *.
 ::contentReference[oaicite:4]{index=4}
+.env*

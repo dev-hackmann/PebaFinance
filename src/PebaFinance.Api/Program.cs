@@ -1,5 +1,6 @@
 using PebaFinance.Infrastructure;
 using PebaFinance.Api.Middleware;
+using DotNetEnv;
 
 namespace PebaFinance
 {
@@ -7,6 +8,7 @@ namespace PebaFinance
     {
         public static void Main(string[] args)
         {
+            Env.Load();
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddInfrastructure(builder.Configuration);
