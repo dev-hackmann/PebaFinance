@@ -53,6 +53,12 @@ namespace PebaFinance
             app.MapControllers();
             app.MapHealthChecks("/health");
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+                runner.MigrateUp();
+            }
+
             app.Run();
         }
     }
